@@ -1,5 +1,5 @@
 ---
-title: "Funding Rate Formula for XYZ Perpetual Markets"
+title: "XYZ Funding Rate: Formula, Scaling Factor and Rationale"
 sidebarTitle: "Funding Rate"
 description: "XYZ applies a 0.5x scaling factor to Hyperliquid's funding formula, targeting ~5.5% annualized baseline funding across all perpetual markets."
 ---
@@ -16,7 +16,7 @@ Applying the standard crypto default to these markets would result in funding co
 
 XYZ calculates the funding rate as follows:
 
-```
+```text
 Funding Rate XYZ (F) = 0.5 × [Average Premium Index (P) + clamp(interest rate − P, −0.0005, 0.0005)]
 ```
 

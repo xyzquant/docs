@@ -24,6 +24,8 @@ Using the median of three independent sources ensures that a single outlier — 
 
 ## Update Clamping
 
+To protect against data anomalies, Relayer updates for both the mark price and the oracle price are clamped to ±50 basis points of the current value.
+
 <Note>
-  Relayer updates for both the mark price and the oracle price are clamped to **±50 basis points** of the current value per update. This prevents sudden large price jumps from immediately propagating to your margin or P&L, giving the system time to reflect genuine price moves rather than data anomalies.
+  The ±50 bps clamp applies per Relayer update. This prevents sudden large price jumps from immediately propagating to your margin or P&L, giving the system time to reflect genuine price moves rather than data anomalies.
 </Note>

@@ -1,7 +1,7 @@
 ---
-title: "Oracle Price: How XYZ Prices Assets 24/7"
+title: "Oracle Price: Continuous-Time EMA for 24/7 Asset Pricing"
 sidebarTitle: "Oracle Price"
-description: "XYZ's oracle derives prices from external markets when open and advances via a continuous-time EMA when external data is unavailable, enabling 24/7 pricing."
+description: "XYZ derives oracle prices from external markets when open and uses a continuous-time EMA when external data is unavailable, enabling 24/7 asset pricing."
 ---
 
 The oracle price serves two critical functions on trade[XYZ]: it is the reference price used to calculate the funding rate, and it is a direct input to the mark price calculation. The key unlock for equity perpetuals is extending the oracle to operate 24/7, well beyond the trading hours of the underlying asset. To achieve this, XYZ prioritizes external pricing and employs a robust internal mechanism whenever external data is unavailable.
@@ -16,7 +16,7 @@ When external inputs are unavailable — such as overnight, on weekends, or duri
 
 With oracle price `S`, the IPD is defined as:
 
-```
+```text
 IPD = max(P_impactBid - S, 0) - max(S - P_impactAsk, 0)
 ```
 
@@ -24,7 +24,7 @@ Where `P_impactBid` and `P_impactAsk` are the average execution prices to trade 
 
 The oracle is robust to irregular updates and market halts. Using a time constant `τ = 30 minutes`, it updates according to:
 
-```
+```text
 S_t = β_t · S_{t-} + (1 - β_t) · x_t
 
 β_t = exp(-Δt* / τ)

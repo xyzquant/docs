@@ -1,7 +1,7 @@
 ---
-title: "Equity Index Perpetuals: SP500, XYZ100, and More"
+title: "Equity Index Perpetuals: SP500, XYZ100, and Beyond"
 sidebarTitle: "Equity Indices"
-description: "XYZ equity index perps use spot index values during cash sessions and futures discounting outside them. The discount rate EMA extends coverage to 23+ hours per day."
+description: "XYZ equity index perps track the spot index during cash sessions and derive price from discounted futures outside them, using a 1-hour EMA discount rate."
 ---
 
 XYZ equity index perpetuals — including SP500 and XYZ100 — are designed to reflect the spot index value at all hours. During the cash trading session, the Relayer uses the live spot index as the oracle price. Outside that session, it derives an implied spot value by discounting the corresponding futures price at an empirically observed rate. This two-source design extends meaningful price coverage well beyond regular exchange hours without requiring an arbitrary overnight price anchor.
@@ -14,7 +14,7 @@ The Relayer consumes executable quotes for both the underlying spot index and th
 
 During the cash session, the **spot index value** serves as the oracle price. Simultaneously, the Relayer observes the spot–futures basis and derives the implied annualized net discount rate:
 
-```
+```text
 d_t = (1 / T_t) × ln(F_t / S_t)
 ```
 
@@ -27,13 +27,13 @@ The net discount rate `d = r − q` implicitly captures the prevailing interest 
 
 The Relayer maintains a continuous-time exponentially weighted moving average (EMA) of `d_t` with a time constant **τ = 1 hour**:
 
-```
+```text
 d̄_t = β_t · d̄_{t⁻} + (1 − β_t) · d_t,    β_t = e^(−Δt / τ)
 ```
 
 Where `Δt = t − t_prev` is the elapsed time since the prior update. As a protective measure, each EMA update is clamped so that:
 
-```
+```text
 |d̄_t − d̄_{t⁻}| ≤ 0.01 bps
 ```
 
@@ -43,7 +43,7 @@ This ensures no single observation produces a disproportionate rate adjustment.
 
 Outside the cash session — but within futures trading hours — the oracle price is derived by discounting the futures price at the prevailing EMA discount rate:
 
-```
+```text
 S_t = F_t × e^(−d̄_t × T_t)
 ```
 

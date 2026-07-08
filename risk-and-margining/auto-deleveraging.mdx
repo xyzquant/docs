@@ -1,7 +1,7 @@
 ---
 title: "Auto-Deleveraging (ADL): Last Resort Risk Management"
 sidebarTitle: "Auto-Deleveraging"
-description: "ADL is the final safeguard in XYZ's liquidation waterfall. It closes profitable positions against insolvent ones when market and backstop liquidations both fail."
+description: "ADL is XYZ's final liquidation safeguard. It closes profitable positions against insolvent ones when market and backstop liquidations both fail."
 ---
 
 Auto-deleveraging (ADL) is the last safeguard in XYZ's liquidation waterfall. It is triggered only when both market order liquidations and backstop liquidations fail to close a position that has become undercollateralized. ADL is mechanical, transparent, and non-discretionary — and every event can be independently verified on-chain via HyperCore's settlement records.
@@ -22,8 +22,8 @@ In a perpetual derivatives market, every long position is matched by a short, an
 
 When ADL is triggered, the system selects users on the profitable side of the market for forced deleveraging. Selection is based on a composite sorting index that accounts for both profitability and leverage:
 
-```
-sorting_index = (mark_price / entry_price) × (notional_position / account_value)
+```text
+sorting_index = (mark_price / entry_price) * (notional_position / account_value)
 ```
 
 Users with the **highest sorting index** — those who are the most profitable and the most leveraged — are deleveraged first. Their positions are closed at the previous mark price against the insolvent side of the market. This transfer of position value keeps aggregate system equity constant and eliminates the bad debt.

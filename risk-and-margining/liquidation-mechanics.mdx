@@ -1,7 +1,7 @@
 ---
-title: "How Liquidations Work on XYZ Perpetual Markets"
+title: "How Liquidations Work on XYZ Perpetual Futures Markets"
 sidebarTitle: "Liquidations"
-description: "Liquidations on XYZ markets trigger when account equity falls below maintenance margin. XYZ uses market orders, then backstop liquidation via the on-chain liquidator vault."
+description: "Liquidations on XYZ trigger when equity falls below maintenance margin. The system uses market orders, then backstop liquidation via the on-chain vault."
 ---
 
 XYZ inherits its liquidation mechanisms from HyperCore. When your account equity falls below the required maintenance margin, the system initiates a liquidation to protect overall market solvency. One key distinction from native Hyperliquid markets: XYZ asset liquidations use the **XYZ Relayer mark price**, not Hyperliquid's native mark price.
@@ -51,13 +51,13 @@ When you enter a trade, XYZ displays an estimated liquidation price. Treat this 
 
 The precise liquidation price for a position is:
 
-```
-liq_price = price - side × margin_available / position_size / (1 - l × side)
+```text
+liq_price = price - side * margin_available / position_size / (1 - l * side)
 ```
 
 where:
 
-```
+```text
 l = 1 / MAINTENANCE_LEVERAGE
 ```
 

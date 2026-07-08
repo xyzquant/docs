@@ -1,5 +1,5 @@
 ---
-title: "XYZ Perpetual Contracts: How They Work"
+title: "XYZ Perpetual Contracts: How They Work on Hyperliquid"
 sidebarTitle: "Overview"
 description: "XYZ perpetuals are linear contracts margined in USDC, with 24/7 oracle pricing and on-chain settlement via Hyperliquid's HyperCore engine."
 ---
@@ -27,7 +27,7 @@ The three bespoke components â€” oracle price, mark price, and external price â€
 
 ## The Relayer
 
-The **Relayer** is the service responsible for computing the oracle, mark, and external prices for each XYZ asset and broadcasting those updates to HyperCore. TradeXYZ manages a distributed set of Relayer instances that transmit updates approximately every **3 seconds**.
+The **Relayer** is the service responsible for computing the oracle, mark, and external prices for each XYZ asset and broadcasting those updates to HyperCore. trade[XYZ] manages a distributed set of Relayer instances that transmit updates approximately every **3 seconds**.
 
 <Note>
   XYZ's oracle updater address is `0x1234567890545d1Df9EE64B35Fdd16966e08aCEC`. You can verify Relayer activity on-chain by monitoring transactions from this address.

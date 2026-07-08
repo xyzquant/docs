@@ -1,7 +1,7 @@
 ---
-title: "Margin Modes and Leverage on XYZ Perpetuals"
+title: "Margin Modes and Leverage on XYZ Perpetual Markets"
 sidebarTitle: "Margin Modes"
-description: "XYZ supports cross, normal isolated, and strict isolated margin. Leverage ranges from 1x up to the per-asset maximum, with maintenance margin at half the initial rate."
+description: "XYZ supports cross, normal isolated, and strict isolated margin. Set leverage up to the per-asset maximum; maintenance margin is half the initial rate."
 ---
 
 XYZ inherits its margining mechanisms from HyperCore. Every time you open a position, you choose a margin mode that determines how collateral is allocated and how a potential liquidation would affect the rest of your account. Understanding the differences between modes — and how leverage interacts with maintenance margin — is essential to managing your risk on XYZ perpetuals.
@@ -36,8 +36,8 @@ You can set leverage to any integer between **1x** and the maximum leverage for 
 
 The margin required to open a position is:
 
-```
-required_margin = position_size × mark_price / leverage
+```text
+required_margin = position_size * mark_price / leverage
 ```
 
 A few important rules govern how leverage and margin interact after a position is open:

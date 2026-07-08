@@ -1,10 +1,16 @@
 ---
 title: "Changelog: XYZ Protocol Updates and Methodology Changes"
 sidebarTitle: "Changelog"
-description: "Historical record of XYZ protocol updates, including discovery bounds methodology changes, index oracle updates, funding rate formula adjustments, and market parameter changes."
+description: "Historical record of XYZ protocol updates: discovery bounds v2, index oracle v2, funding rate formula changes, and oracle time constant updates."
 ---
 
 This page records significant protocol and methodology updates to XYZ markets. Entries are listed in reverse chronological order. Expand any entry to read the full details, including archived v1 designs where applicable.
+
+<Accordion title="April 30, 2026 — Oracle Time Constant Update">
+
+We reduced the internal oracle time constant from 1 hour to 30 minutes for equity perpetuals.
+
+</Accordion>
 
 <Accordion title="March 13, 2026 — Updated Discovery Bounds Methodology (v2)">
 
@@ -96,8 +102,20 @@ Funding Rate XYZ (F) = 0.5 × [Average Premium Index (P) + clamp(interest rate �
 
 </Accordion>
 
+<Accordion title="November 21, 2025 — Oracle Time Constant Update">
+
+We reduced the internal oracle time constant from 8 hours to 1 hour for equity perpetuals.
+
+**Effect in Practice**
+
+- **Faster price discovery reflection** — during closed sessions, the oracle now tracks order flow with a shorter time constant, reducing the gap between the traded price and the oracle.
+- **Lower funding drag on genuine moves** — traders who are directionally correct on gap moves retain more of the move; shorts sitting through those gaps receive proportionally less funding compensation.
+- **Unchanged safety properties** — the `1 / max_leverage` band on mark vs last external spot continues to limit single-tick jumps and weekend mark-price bands.
+
+</Accordion>
+
 <Accordion title="Market Parameters">
 
-Market parameter changes are tracked on dedicated sub-pages. See the [market parameters changelog](/resources/changelog) for a full history of parameter updates by date.
+Individual market parameter changes — such as leverage adjustments, discovery bound updates, and open interest cap changes — are tracked by date in the [Specification Index](/resources/specification-index). For the current parameters of any market, refer to the applicable row in the specification index.
 
 </Accordion>

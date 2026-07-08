@@ -1,7 +1,7 @@
 ---
 title: "Discovery Bounds: Safe 24/7 Price Discovery on XYZ"
 sidebarTitle: "Discovery Bounds"
-description: "Discovery bounds limit mark price movement to ±(1/max leverage) around a reference price, enabling confident market making during extended trading sessions."
+description: "Discovery bounds cap mark price movement to ±(1/max leverage) around a reference price, enabling confident market making during extended trading sessions."
 ---
 
 A fundamental feature of trade[XYZ] is 24/7 price discovery. When external markets close, XYZ traders continue to buy, sell, and speculate on an asset's fair price — making XYZ the primary venue for price discovery over weekends, holidays, and other extended sessions. Discovery bounds make this possible in a controlled and predictable way by limiting how far the mark price can move from a reference price. By capping the extent of price moves, market makers and traders can participate in extended-hours price discovery with well-defined risk. If your liquidation price falls outside the active bounds, your position cannot be liquidated while those bounds remain in effect.
@@ -22,11 +22,11 @@ When the oracle price approaches the edge of the current bound and reaches a con
 
 #### Trigger Formulas
 
-```
+```text
 upper_trigger = reference_price × (1 + discovery_bound × oracle_threshold)
 ```
 
-```
+```text
 lower_trigger = reference_price × (1 - discovery_bound × oracle_threshold)
 ```
 
@@ -71,7 +71,7 @@ The following example uses these parameters:
 7. New tradeable range: 104.74 – 115.76. This is the final level upward (hard cap reached).
 8. If the oracle price reaches 115.76, it hits the hard cap. No further upward movement is permitted until external pricing resumes.
 
-```
+```text
 Maximum price from origin = 100.00 × 1.05^3 ≈ 115.76  (+15.76%)
 Maximum price below origin = 100.00 × 0.95^3 ≈ 85.74  (-14.26%)
 ```

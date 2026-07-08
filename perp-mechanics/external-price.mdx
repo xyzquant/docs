@@ -1,7 +1,7 @@
 ---
-title: "External Price: The Last Known Market Close Price"
+title: "External Price: Last Known Market Close on trade[XYZ]"
 sidebarTitle: "External Price"
-description: "The external price is the last externally-derived fair price. It equals the oracle when markets are open, and freezes at close while the oracle advances internally."
+description: "The external price tracks the oracle when markets are open and freezes at close, anchoring discovery bounds during extended trading sessions on trade[XYZ]."
 ---
 
 The external price is a distinct price feed published alongside the oracle and mark prices in every Relayer update. Its purpose is to record the last price that was directly derived from external markets, and to keep that reference point stable and accessible while the oracle continues to evolve on its own during extended trading sessions.
