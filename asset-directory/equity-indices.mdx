@@ -1,0 +1,78 @@
+---
+title: "Equity Index Perpetuals: SP500, XYZ100, and More"
+sidebarTitle: "Equity Indices"
+description: "XYZ equity index perps use spot index values during cash sessions and futures discounting outside them. The discount rate EMA extends coverage to 23+ hours per day."
+---
+
+XYZ equity index perpetuals — including SP500 and XYZ100 — are designed to reflect the spot index value at all hours. During the cash trading session, the Relayer uses the live spot index as the oracle price. Outside that session, it derives an implied spot value by discounting the corresponding futures price at an empirically observed rate. This two-source design extends meaningful price coverage well beyond regular exchange hours without requiring an arbitrary overnight price anchor.
+
+## External Price Derivation
+
+The Relayer consumes executable quotes for both the underlying spot index and the corresponding traditional (dated) equity index futures from institutional liquidity providers.
+
+### Cash Session
+
+During the cash session, the **spot index value** serves as the oracle price. Simultaneously, the Relayer observes the spot–futures basis and derives the implied annualized net discount rate:
+
+```
+d_t = (1 / T_t) × ln(F_t / S_t)
+```
+
+Where:
+- **F_t** = concurrent futures price
+- **S_t** = spot index value
+- **T_t** = time to futures settlement, in years
+
+The net discount rate `d = r − q` implicitly captures the prevailing interest rate `r` and forward dividend yield `q` without requiring either to be specified independently.
+
+The Relayer maintains a continuous-time exponentially weighted moving average (EMA) of `d_t` with a time constant **τ = 1 hour**:
+
+```
+d̄_t = β_t · d̄_{t⁻} + (1 − β_t) · d_t,    β_t = e^(−Δt / τ)
+```
+
+Where `Δt = t − t_prev` is the elapsed time since the prior update. As a protective measure, each EMA update is clamped so that:
+
+```
+|d̄_t − d̄_{t⁻}| ≤ 0.01 bps
+```
+
+This ensures no single observation produces a disproportionate rate adjustment.
+
+### Extended Session
+
+Outside the cash session — but within futures trading hours — the oracle price is derived by discounting the futures price at the prevailing EMA discount rate:
+
+```
+S_t = F_t × e^(−d̄_t × T_t)
+```
+
+The EMA rate established during the prior cash session carries forward **unchanged** until the next cash session opens, at which point the EMA resumes updating with live basis observations.
+
+## Parameters
+
+| Parameter | Value |
+|---|---|
+| Discount Rate EMA Time Constant (τ) | 1 hour |
+| Discount Rate EMA Clamp | 0.01 bps per update |
+
+## Active Contract Schedule
+
+The table below shows the futures underlying suffix and its active-until date. These apply to both SP500 and XYZ100.
+
+| Underlying Suffix | Active Until (UTC) |
+|---|---|
+| H6 | `2026-03-16T14:00:00 UTC` |
+| M6 | `2026-06-15T14:00:00 UTC` |
+| U6 | `2026-09-14T14:00:00 UTC` |
+| Z6 | `2026-12-14T15:00:00 UTC` |
+
+## Index Descriptions
+
+<Note>
+  **XYZ100** is a modified market-cap-weighted index of the 100 largest non-financial U.S.-listed companies. It is designed to reflect the performance of the largest and most liquid segment of the U.S. equity market, excluding financials.
+</Note>
+
+<Note>
+  **SP500** tracks 500 leading U.S. publicly traded companies, representing approximately 80% of total U.S. equity market capitalization. It is one of the most widely followed benchmarks for U.S. large-cap equity performance.
+</Note>

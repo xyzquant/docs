@@ -1,0 +1,71 @@
+---
+title: "How Liquidations Work on XYZ Perpetual Markets"
+sidebarTitle: "Liquidations"
+description: "Liquidations on XYZ markets trigger when account equity falls below maintenance margin. XYZ uses market orders, then backstop liquidation via the on-chain liquidator vault."
+---
+
+XYZ inherits its liquidation mechanisms from HyperCore. When your account equity falls below the required maintenance margin, the system initiates a liquidation to protect overall market solvency. One key distinction from native Hyperliquid markets: XYZ asset liquidations use the **XYZ Relayer mark price**, not Hyperliquid's native mark price.
+
+<Warning>
+  The on-chain backstop liquidator is live for all cross margin-enabled XYZ assets. This fully on-chain strategy absorbs backstop-liquidatable positions directly on-chain, making those assets significantly less likely to experience auto-deleveraging (ADL) during high-volatility events.
+</Warning>
+
+## How Liquidations Work
+
+A liquidation is triggered when your account equity — collateral plus unrealized P&L — drops below the maintenance margin level for your open positions.
+
+<Steps>
+  <Step title="Market Order Liquidation">
+    The system sends market orders to the book for the full size of the position. Depending on available liquidity, these orders may only partially close the position. If maintenance margin requirements are met after a partial or full close, you retain any remaining collateral.
+  </Step>
+  <Step title="Backstop Liquidation">
+    If your account equity drops below **two-thirds of the maintenance margin** without a successful market order liquidation, the position enters backstop liquidation via the liquidator vault. This step applies only to cross margin-enabled assets.
+
+    During backstop liquidation:
+    - The maintenance margin is **not** returned to you.
+    - All of your cross positions and cross margin are transferred to the liquidator.
+    - Isolated positions are not affected by a cross backstop liquidation.
+  </Step>
+</Steps>
+
+<Note>
+  If market and backstop liquidations both fail to close an undercollateralized position, the system falls back to auto-deleveraging (ADL). See [Auto-Deleveraging](/risk-and-margining/auto-deleveraging) for details.
+</Note>
+
+---
+
+## Computing the Liquidation Price
+
+When you enter a trade, XYZ displays an estimated liquidation price. Treat this as an approximation — the actual liquidation price can differ due to:
+
+- Changes in order book liquidity
+- Funding payments over time
+- Unrealized P&L fluctuations in other cross margin positions
+
+### Cross vs. Isolated Margin
+
+- **Cross margin:** the actual liquidation price is independent of the leverage you set, because collateral is shared across positions.
+- **Isolated margin:** the liquidation price depends on the leverage you set, because the amount of isolated margin allocated is determined by your initial margin.
+
+### Liquidation Price Formula
+
+The precise liquidation price for a position is:
+
+```
+liq_price = price - side × margin_available / position_size / (1 - l × side)
+```
+
+where:
+
+```
+l = 1 / MAINTENANCE_LEVERAGE
+```
+
+- `price` is the entry price of the position.
+- `side` is `+1` for a long and `-1` for a short.
+- `margin_available` is the collateral available to the position.
+- `position_size` is the size of the position in base asset units.
+
+<Note>
+  For assets with margin tiers, `MAINTENANCE_LEVERAGE` is not fixed. It depends on the specific margin tier that corresponds to the position value at the liquidation price.
+</Note>

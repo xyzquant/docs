@@ -1,0 +1,30 @@
+---
+title: "FX Perpetuals: EUR/USD and USD/JPY on trade[XYZ]"
+sidebarTitle: "FX"
+description: "XYZ FX perps cover EUR/USD and USD/JPY with 24/5 external coverage from institutional liquidity providers, plus continuous internal pricing over weekends."
+---
+
+trade[XYZ] offers perpetual contracts on major FX pairs, giving you continuous exposure to foreign exchange markets. The Relayer sources executable quotes from institutional liquidity providers throughout the trading week, and an internal pricing mechanism takes over during weekends and any brief gaps in external data — so you always have a price to trade against, even outside standard FX market hours.
+
+## External Coverage
+
+For FX perpetuals, the Relayer sources executable quotes from institutional liquidity providers during market open sessions. Trading continues during most US holidays.
+
+| Instrument | Week Start (ET) | Week End (ET) |
+|---|---|---|
+| EUR / USD | Sunday 5:00 PM | Friday 5:00 PM |
+| USD / JPY | Sunday 5:00 PM | Friday 5:00 PM |
+
+## Internal Coverage
+
+Internal pricing applies from **Friday 5:00 PM ET to Sunday 5:00 PM ET**, or at any time there is a gap of more than **30 seconds** between external oracle datapoints.
+
+<Note>
+  This ensures continuous pricing coverage across all sessions, including after-hours. You can read more about how the internal pricing mechanism works on the [Oracle Price](/perp-mechanics/oracle-price#internal-pricing) page.
+</Note>
+
+## Data Source
+
+<Note>
+  See the [Specification Index](/resources/specification-index) for detailed pricing reference sources and specifications for each FX market.
+</Note>

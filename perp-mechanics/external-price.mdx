@@ -1,0 +1,29 @@
+---
+title: "External Price: The Last Known Market Close Price"
+sidebarTitle: "External Price"
+description: "The external price is the last externally-derived fair price. It equals the oracle when markets are open, and freezes at close while the oracle advances internally."
+---
+
+The external price is a distinct price feed published alongside the oracle and mark prices in every Relayer update. Its purpose is to record the last price that was directly derived from external markets, and to keep that reference point stable and accessible while the oracle continues to evolve on its own during extended trading sessions.
+
+## When External Markets Are Open
+
+When the underlying market is actively trading, the external price is equal to the oracle price. Both prices move together in real time, reflecting the same externally-derived fair value.
+
+## When External Markets Are Closed
+
+When external markets close — at the end of a trading day, at the start of a weekend, or on a holiday — the external price **freezes** at the last externally-derived fair price (the external close price). The oracle price, however, continues to advance via the internal continuous-time EMA mechanism described on the [Oracle Price](/perp-mechanics/oracle-price) page.
+
+This means that after market close:
+
+- The **external price** remains fixed at the closing level.
+- The **oracle price** drifts based on order book activity on XYZ.
+- The **mark price** continues to be computed from all three components as usual.
+
+## Role in Discovery Bounds
+
+The external price serves as the **reference price** for discovery bounds during internal pricing sessions. When external markets are closed, the discovery bounds are anchored to the last external close, restricting how far the mark price can move from that fixed reference until external pricing resumes.
+
+<Tip>
+  Understanding the distinction between the external price and the oracle price is key to making sense of how discovery bounds work during weekends and holidays. See the [Discovery Bounds](/perp-mechanics/discovery-bounds) page for a full explanation and worked example.
+</Tip>

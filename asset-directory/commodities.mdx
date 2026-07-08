@@ -1,0 +1,55 @@
+---
+title: "Commodity Perpetuals: Metals, Energy, and More"
+sidebarTitle: "Commodities"
+description: "XYZ commodity perps trade 23/5. Precious metals use liquid spot markets; industrial metals and energy use rolling futures contracts with a 5-to-10-business-day roll."
+---
+
+XYZ lists perpetual contracts on a range of commodities including precious metals, industrial metals, and energy. External pricing coverage runs **23/5**, from **Sunday 6:00 PM ET** to **Friday 5:00 PM ET**, with a daily gap from 5:00 PM to 6:00 PM ET during which internal pricing applies. This schedule reflects the underlying commodity markets' standard hours and the daily close/reopen cycle.
+
+## External Price Derivation
+
+The Relayer derives external prices differently depending on whether a liquid spot market exists for the commodity.
+
+### Precious Metals
+
+Liquid spot markets are available for **GOLD**, **SILVER**, **PLATINUM**, and **PALLADIUM**. The Relayer uses these spot markets directly as the external price source for each asset.
+
+### Industrial Metals & Energy
+
+Industrial metals and energy commodities do not have a single unified "spot" market in the way financial assets do. The underlying price of these assets varies by geography and contract specification.
+
+To derive external prices for these assets, the Relayer uses an industry-standard approach: referencing a fixed set of **designated futures contracts**. The active contract is rolled from the **5th to the 10th business day** of the month according to a predefined weighting schedule.
+
+Roll transitions occur during **internal pricing sessions**. Updated contract weightings take effect when the oracle switches back to external pricing at 6:00 PM ET.
+
+#### Roll Weighting Schedule
+
+| Business Day | Front Contract | Next Contract |
+|---|---|---|
+| 5th | 100% | 0% |
+| 6th | 80% | 20% |
+| 7th | 60% | 40% |
+| 8th | 40% | 60% |
+| 9th | 20% | 80% |
+| 10th | 0% | 100% |
+
+<Note>
+  See [Roll Schedules](/resources/roll-schedules) for the specific roll dates for each futures-based market (WTIOIL, BRENTOIL, COPPER, NATGAS).
+</Note>
+
+## Designated Contract Schedule
+
+The table below defines the active contract at the start of each month for each commodity. Contract month codes follow standard futures conventions.
+
+| Asset | Underlying | Jan | Feb | Mar | Apr | May | Jun | Jul | Aug | Sep | Oct | Nov | Dec |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| COPPER | 1 lb of Copper | H | H | K | K | N | N | U | U | Z | Z | Z | H |
+| WTIOIL (CL) | 1 barrel of WTI Light Sweet Crude Oil | G | H | J | K | M | N | Q | U | V | X | Z | F |
+| NATGAS | 1 MMBtu of Henry Hub Natural Gas | G | H | J | K | M | N | Q | U | V | X | Z | F |
+| BRENTOIL | 1 barrel of Brent Crude Oil | H | J | K | M | N | Q | U | V | X | Z | F | G |
+
+## Data Source
+
+<Note>
+  See the [Specification Index](/resources/specification-index) for the full list of pricing reference sources for each commodity market.
+</Note>

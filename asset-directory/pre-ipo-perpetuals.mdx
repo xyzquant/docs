@@ -1,0 +1,119 @@
+---
+title: "Pre-IPO Perpetuals (IPOPs): Trade Before Listing"
+sidebarTitle: "Pre-IPO Perpetuals"
+description: "IPOPs are cash-settled perpetuals on anticipated public listings. They trade 24/7 via XYZ's internal oracle and convert to standard equity perps after listing."
+---
+
+Pre-IPO Perpetuals (IPOPs) are cash-settled perpetual derivative contracts that reference the anticipated public listing of a private company. They are designed to create a continuous market for pre-listing price discovery — a way to observe and act on the market's evolving view of where a company's future public equity may trade before it is freely tradable on a traditional exchange.
+
+<Warning>
+  **Pre-IPO Perpetuals are not shares. They are not IPO allocations. They are not tokenized equity, securities entitlements, or rights to receive any security. A position in a Pre-IPO Perpetual does not give the holder ownership, voting rights, information rights, dividends, allocation rights, or any claim against the referenced issuer.**
+</Warning>
+
+## Why IPOPs Exist
+
+IPO pricing is one of the most important valuation events in public markets, but the process leading into that price is not itself a continuous public market.
+
+During the listing process, information may emerge through filings, investor meetings, bookbuilding, private-market activity, price-range updates, press reports, and exchange-opening data. These signals can be meaningful, but they do not form a continuous public market.
+
+That absence matters. A market price can aggregate dispersed information, reveal changes in demand, and convert competing views into a single observable signal. For issuers, that signal may help contextualize demand. For underwriters and market makers, it may improve risk assessment. For public market participants, it may provide a way to evaluate an event that is often difficult to access directly.
+
+IPOPs create a venue for that price formation. They are cash-settled derivatives that allow participants to trade and hedge views on a referenced issuer's anticipated public equity value before, during, and after the listing process. They do not provide IPO shares, ownership, allocation rights, or any claim on the issuer. They are not a replacement for the IPO process. Their role is to make pre-listing price discovery open, continuous, and risk-bearing.
+
+## Specification
+
+Each Pre-IPO Perpetual has a market-specific specification. Review the applicable specification in the [Specification Index (IPOPs)](/resources/specification-index-ipops) before trading.
+
+| Item | Description |
+|---|---|
+| Instrument | Cash-settled linear perpetual contract |
+| Reference | Anticipated public equity of a named issuer |
+| Pricing Methodology | XYZ Internal Oracle Mechanism |
+| Trading Hours | 24/7 continuous trading |
+| Ownership Rights | None |
+| IPO Allocation Rights | None |
+| Post-listing treatment | The contract converts to a standard equity perp shortly after the underlying begins regular trading |
+| Alternative event treatment | Market may settle under predefined market-specific rules |
+
+## Market Design
+
+A standard listed-equity perpetual references an equity that already trades on an external market. A Pre-IPO Perpetual begins earlier — before listing, there is no public equity price to use as an external oracle.
+
+The market therefore operates with an internal pricing mechanism until a qualifying public listing occurs and sufficient external data becomes available. The result is a single derivative market that can span the pre-listing and post-listing phases of an issuer's transition to public trading.
+
+### Initial Reference
+
+At launch, XYZ initializes the market at a **discretionary reference price** for each IPOP market. The reference is a starting value from which the market begins to trade, and serves as the anchor price to which *Discovery Bound* market protections are enforced.
+
+<Note>
+  The initial reference price is not a forecast and not an indication of a public listing price. It may differ significantly from any IPO price range, final IPO price, opening public trade, or post-listing market price.
+</Note>
+
+XYZ may also display an initial reference share count and an implied initial reference market cap. These figures are intended solely as initial references and may be estimates based on the best available public information at launch, which may be incomplete, preliminary, or later revised. Any displayed reference share count or implied initial reference market cap is indicative only — it is not guaranteed, not a fair value reference, and may differ materially from the issuer's actual, eventual, or market-implied fully diluted share count or market capitalization.
+
+### Pre-Listing Mechanism
+
+IPOPs trade via XYZ's internal pricing mechanism, similar to how standard XYZ perpetuals operate over weekends.
+
+- **Oracle price:** Derived from a 30-minute exponentially weighted moving average (EMA) that advances via the market's impact price difference — the same mechanism used for standard XYZ internal pricing.
+- **Funding rate:** Premium samples are computed at **1% of the standard XYZ perpetual funding calculation** — a funding multiplier of **0.005** on HyperCore's clamped interest rate and premium formula.
+- **Discovery Bounds:** Active at all times to mitigate risk and reduce high-velocity movements while facilitating continuous price discovery.
+
+### Conversion to a Normal Equity Perpetual
+
+When the referenced issuer completes its public listing, the IPOP is expected to convert into a normal equity perpetual with external pricing and the standard (0.5) funding multiplier.
+
+Conversion occurs after the underlying asset begins regular trading and external market data is sufficient to support standard oracle pricing — **typically the first regular session after listing**. External pricing then resumes in the same manner as it does for standard XYZ perpetuals at the start of the traditional trading week.
+
+Conversion presumes a public listing on a recognized exchange, in the expected jurisdiction, in the expected structure. Where the listing diverges materially — for example, via a foreign exchange, depositary receipts, a direct listing, or a SPAC combination — XYZ may treat the event as a conversion with an adjusted reference asset, a settlement trigger, or a composite of the two, depending on which best preserves the economics of the original market. Treatment will be specified in the corresponding announcement.
+
+## Alternative Events
+
+IPOP markets are designed to operate through the period leading up to an expected listing. Each market is configured with two parameters that govern non-listing scenarios:
+
+- **Anticipated Listing Date:** The expected public listing date. This date may reflect an estimate, may differ from the actual listing date, and the estimate itself may be subject to change. The anticipated listing date may be referenced for alternative settlement on the basis of Extraordinary Delay, to prevent an IPOP market from continuing indefinitely in the wake of unforeseen events including repeated or significant delays.
+
+- **Listing Grace Period:** The period following the Scheduled Listing Date during which a postponement, deferral, or non-occurrence of the listing shall not, by itself, constitute an Extraordinary Delay or otherwise invoke Alternative Settlement.
+
+### Default Alternative Settlement
+
+By default, the alternative settlement price is the **time-weighted average price (TWAP)** of the IPOP market from the market launch date through the settlement date. This design:
+
+- Reduces reliance on a short lookback window or single point-in-time price
+- Reflects the market's broader price discovery over the full course of the IPOP's life
+- Applies from the point at which a decision to invoke alternative settlement has been made, so there is no incentive to trade or manipulate the price to influence the settlement outcome once that information is available
+
+### Settlement Considerations
+
+XYZ may apply an alternative settlement methodology where the default TWAP would not reasonably reflect fair value at settlement. The principal cases are:
+
+- **Transaction Events:** The referenced issuer is acquired, taken private, recapitalized, or otherwise consummates a transaction that establishes a transaction price prior to or in lieu of a public listing. In this case, settlement may reference that transaction price. A transaction that does not foreclose a subsequent public listing (such as a partial tender or minority recapitalization) is not expected to trigger settlement on its own.
+
+- **Extended IPOP Markets:** The market has been active long enough that the full-life TWAP no longer reasonably reflects current fair value. Settlement may reference a shorter, more recent TWAP or another methodology specified in the settlement announcement.
+
+- **Adverse Events:** The referenced issuer experiences a material adverse event — such as insolvency, regulatory enforcement, or material restatement — that effectively forecloses the expected listing. In this case, settlement may reference an alternative price that reflects fair value following the event.
+
+Any alternative methodology or conversion treatment for non-standard listing outcomes will be specified in the settlement announcement for the affected market.
+
+### Worked Example
+
+| Parameter | Value |
+|---|---|
+| IPOP Contract Launch Date | May 1, 2026 |
+| Anticipated Listing Date | May 30, 2026 |
+| Listing Grace Period | 60 days |
+
+**Step-by-step walkthrough:**
+
+1. On **May 1, 2026**, an IPOP market launches at a reference price set by XYZ. Trading begins and the market price evolves with order flow.
+2. The IPOP's expected listing date is **May 30, 2026**. The market is configured with an Anticipated Listing Date of May 30, 2026 and a 60-day Grace Period.
+3. If the underlying issuer lists by **July 29**, the market converts to a standard externally-priced perpetual.
+4. If the underlying issuer has not completed its public listing by May 30, and there is no material guidance suggesting a revised near-term listing date, the market may be resolved via alternative settlement on **July 29**.
+5. During the Listing Grace Period, if the underlying issuer does list, the market may still convert to a standard externally-priced perpetual.
+6. The settlement price would be calculated using a **TWAP of the IPOP market price from May 1 through July 29**, unless otherwise specified.
+
+## Risks
+
+<Warning>
+  IPOP markets carry risks beyond those of standard XYZ markets. Review the [Pre-IPO Perpetual Markets Risks and Disclaimers](/legal/pre-ipo-risks) before trading any IPOP market.
+</Warning>

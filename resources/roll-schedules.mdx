@@ -1,0 +1,42 @@
+---
+title: "Commodity Futures Roll Schedules for XYZ Markets"
+sidebarTitle: "Roll Schedules"
+description: "Monthly roll schedule for XYZ commodity markets (COPPER, WTIOIL, BRENTOIL, NATGAS) referencing futures-based price feeds from the 5th to 10th business day."
+---
+
+This page shows the active contract month for each futures-based commodity market on XYZ and the schedule for rolling from one contract to the next. Use it to understand when pricing transitions occur and how blended weightings apply during a roll window.
+
+## How Rolls Work
+
+The roll period runs from the 5th to the 10th business day of the month. During this window, the oracle price transitions from the front-month contract to the next-month contract via a daily blended weighting. Updated weightings take effect when the oracle switches back to external pricing at 6:00 PM ET each day.
+
+<Note>
+  All roll windows run from 5:30 PM ET on the start date to 5:30 PM ET on the end date.
+</Note>
+
+### Example Roll: WTIOIL Q6 → U6
+
+The following example shows how WTIOIL transitions from the Q6 contract to the U6 contract over five steps:
+
+| Date | Front-Month (Q6) | Next-Month (U6) |
+|---|---|---|
+| 2026-07-08 5:30 PM ET | 80% | 20% |
+| 2026-07-09 5:30 PM ET | 60% | 40% |
+| 2026-07-10 5:30 PM ET | 40% | 60% |
+| 2026-07-13 5:30 PM ET | 20% | 80% |
+| 2026-07-14 5:30 PM ET | 0% (roll complete) | 100% |
+
+## Roll Schedule
+
+The table below shows the roll transition for each instrument during each month's roll window. Each cell shows the front-month contract rolling into the next-month contract (e.g., `K6 to M6`). A single contract code indicates no roll occurs in that window.
+
+| Instrument | Apr 8–14 | May 7–13 | Jun 5–11 | Jul 8–14 | Aug 7–13 | Sep 8–14 | Oct 7–13 | Nov 6–12 | Dec 7–11 |
+|---|---|---|---|---|---|---|---|---|---|
+| COPPER | `K6 to N6` | `N6` | `N6 to U6` | `U6` | `U6 to Z6` | `Z6` | `Z6` | `Z6 to H7` | `H7` |
+| WTIOIL (CL) | `K6 to M6` | `M6 to N6` | `N6 to Q6` | `Q6 to U6` | `U6 to V6` | `V6 to X6` | `X6 to Z6` | `Z6 to F7` | `F7 to G7` |
+| BRENTOIL | `M6 to N6` | `N6 to Q6` | `Q6 to U6` | `U6 to V6` | `V6 to X6` | `X6 to Z6` | `Z6 to F7` | `F7 to G7` | `G7 to H7` |
+| NATGAS | `K26 to M26` | `M26 to N26` | `N26 to Q26` | `Q26 to U26` | `U26 to V26` | `V26 to X26` | `X26 to Z26` | `Z26 to F27` | `F27 to G27` |
+
+<Tip>
+  For full details on how commodity oracle prices are derived, visit the [Commodities asset directory](/asset-directory/commodities) page.
+</Tip>

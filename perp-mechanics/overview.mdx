@@ -1,0 +1,64 @@
+---
+title: "XYZ Perpetual Contracts: How They Work"
+sidebarTitle: "Overview"
+description: "XYZ perpetuals are linear contracts margined in USDC, with 24/7 oracle pricing and on-chain settlement via Hyperliquid's HyperCore engine."
+---
+
+A perpetual derivative contract (or "perp") is a derivative product that allows you to speculate on an asset's price without an expiry date. Unlike traditional futures, which settle on a fixed date, you can hold a position indefinitely. Perps rely on a funding rate mechanism to keep the contract price aligned with the underlying spot price.
+
+## What are XYZ perpetuals?
+
+XYZ perpetuals are linear contracts, margined and settled in USDC. The oracle is denominated in USD, and no USDC/USD conversion is applied — economic exposure is therefore _quanto_, with USD profit and loss cash-settled in USDC.
+
+## HyperCore vs. XYZ-bespoke components
+
+XYZ perpetuals are listed on the XYZ HIP-3 deployment. Most of the core infrastructure is shared with Hyperliquid's native perp engine:
+
+| Layer | Handled by |
+|---|---|
+| Order matching, order types | HyperCore |
+| Funding calculations | HyperCore |
+| Liquidations & auto-deleveraging | HyperCore |
+| Oracle price | XYZ (bespoke) |
+| Mark price | XYZ (bespoke) |
+| External price | XYZ (bespoke) |
+
+The three bespoke components — oracle price, mark price, and external price — are what allow XYZ markets to operate 24/7 across equities, indices, commodities, FX, and pre-IPO assets.
+
+## The Relayer
+
+The **Relayer** is the service responsible for computing the oracle, mark, and external prices for each XYZ asset and broadcasting those updates to HyperCore. TradeXYZ manages a distributed set of Relayer instances that transmit updates approximately every **3 seconds**.
+
+<Note>
+  XYZ's oracle updater address is `0x1234567890545d1Df9EE64B35Fdd16966e08aCEC`. You can verify Relayer activity on-chain by monitoring transactions from this address.
+</Note>
+
+## The three bespoke price components
+
+Each of the three XYZ-specific prices serves a distinct role in keeping markets safe and fairly priced:
+
+| Component | Role | Detail |
+|---|---|---|
+| **Oracle Price** | The reference price used for funding and liquidations, derived from external market data | [Oracle Price →](/perp-mechanics/oracle-price) |
+| **Mark Price** | A smoothed, manipulation-resistant price used to calculate unrealised P&L | [Mark Price →](/perp-mechanics/mark-price) |
+| **External Price** | The real-time price sourced from external venues, used as the basis for the oracle | [External Price →](/perp-mechanics/external-price) |
+
+## Explore perp mechanics
+
+<CardGroup cols={2}>
+  <Card title="Oracle Price" icon="satellite-dish" href="/perp-mechanics/oracle-price">
+    How XYZ derives reference prices 24/7 from external markets and internal EMA mechanisms.
+  </Card>
+  <Card title="Mark Price" icon="chart-line" href="/perp-mechanics/mark-price">
+    How the mark price is calculated and why it differs from the last traded price.
+  </Card>
+  <Card title="External Price" icon="arrow-right-arrow-left" href="/perp-mechanics/external-price">
+    The real-time external venue price that feeds into oracle and mark calculations.
+  </Card>
+  <Card title="Discovery Bounds" icon="circle-dot" href="/perp-mechanics/discovery-bounds">
+    Leverage-based bounds that enable safe 24/7 price discovery when underlying markets are closed.
+  </Card>
+  <Card title="Fees" icon="receipt" href="/perp-mechanics/fees">
+    Standard and growth-mode fee tiers based on 14-day rolling volume.
+  </Card>
+</CardGroup>

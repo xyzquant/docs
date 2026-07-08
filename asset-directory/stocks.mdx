@@ -1,0 +1,151 @@
+---
+title: "Stock Perpetuals on trade[XYZ]: US, Korea, Japan & HK"
+sidebarTitle: "Stocks"
+description: "Trade 24/7 perpetual contracts on US, Korean, Japanese, and Hong Kong stocks. XYZ uses external pricing during market hours and an internal EMA overnight and on weekends."
+---
+
+trade[XYZ] lists perpetual contracts on equities from multiple exchanges around the world, giving you continuous 24/7 trading access. During each exchange's open sessions, the Relayer sources external prices from institutional data providers and live market feeds. Outside those sessions, an internal exponential moving average (EMA) mechanism carries pricing forward so you can trade at any hour without interruption.
+
+<Tabs>
+  <Tab title="US">
+    ## External Coverage
+
+    The Relayer derives external prices for US stocks 24/5, from **Sunday 8:00 PM ET** to **Friday 8:00 PM ET**.
+
+    This is achieved by aggregating across the following sessions:
+
+    | Session | Hours (ET) |
+    |---|---|
+    | Pre-Market | 4:00 AM – 9:30 AM |
+    | Market | 9:30 AM – 4:00 PM |
+    | Post-Market | 4:00 PM – 8:00 PM |
+    | Overnight | 8:00 PM – 4:00 AM |
+
+    The overnight trading session is provided by **Blue Ocean ATS (BOATS)**.
+
+    ## Data Source
+
+    <Note>
+      See the [Specification Index](/resources/specification-index) for the full list of pricing reference sources for each US equity market.
+    </Note>
+  </Tab>
+
+  <Tab title="Korea">
+    ## External Coverage (GMT+9)
+
+    For Korean equities, the Relayer sources executable quotes from institutional data providers during the following market sessions:
+
+    | Session | Hours (GMT+9) |
+    |---|---|
+    | Pre-market | 8:00 AM – 8:50 AM |
+    | Main Session | 9:00 AM – 3:30 PM |
+    | After-hours | 3:40 PM – 8:00 PM |
+
+    ## Internal Coverage (GMT+9)
+
+    Internal pricing applies during all periods outside the external sessions above:
+
+    **Weekdays**
+    - 8:50 AM – 9:00 AM
+    - 3:30 PM – 3:40 PM
+    - 8:00 PM – 8:00 AM
+
+    **Weekends**
+    - Friday 8:00 PM through Monday 8:00 AM
+
+    **Holidays** — see [Holiday Closures](/resources/holiday-closures)
+
+    <Note>
+      Internal pricing is also applied if there is a gap of more than **30 seconds** between external oracle datapoints, ensuring continuous coverage across all sessions including after-hours.
+    </Note>
+
+    ## FX Conversion
+
+    The Relayer aggregates executable quotes for KRW-denominated instruments alongside real-time USD/KRW FX rates. To maintain consistency with XYZ's linear contract structure — margined and settled exclusively in USDC — the system automatically converts these KRW quotes into USD pricing, eliminating currency friction for you.
+
+    ## Markets
+
+    | Instrument | Description |
+    |---|---|
+    | **SKHX / USDC** | SK Hynix Inc. perpetual contracts are listed under ticker $SKHX. SK Hynix manufactures semiconductors including DRAM, NAND flash, and SRAM chips. The SKHX oracle price tracks the USD value of 1 common share of SK Hynix Inc. (KRX: 000660). Replicate by dividing the KRW price of 000660 KS Equity by the USD/KRW exchange rate. **Example:** 886,000 KRW ÷ 1,444.10 KRW/USD = **$613.53 USD** |
+    | **SMSN / USDC** | Samsung Electronics Co., Ltd. perpetual contracts are listed under ticker $SMSN. Samsung produces memory chips (DRAM and NAND), logic chips, smartphones, display panels, and home appliances. The SMSN oracle price tracks the USD value of 1 common share of Samsung Electronics Co., Ltd. (KRX: 005930). Replicate by dividing the KRW price of 005930 KS Equity by the USD/KRW exchange rate. **Example:** 181,000 KRW ÷ 1,444.10 KRW/USD = **$125.34 USD** |
+    | **HYUNDAI / USDC** | Hyundai Motor Company perpetual contracts are listed under ticker $HYUNDAI. Hyundai is a leading global automobile manufacturer and majority owner of Boston Dynamics. The HYUNDAI oracle price tracks the USD value of 1 common share of Hyundai Motor Company (KRX: 005380). Replicate by dividing the KRW price of 005380 KS Equity by the USD/KRW exchange rate. **Example:** 499,000 KRW ÷ 1,444.10 KRW/USD = **$345.54 USD** |
+    | **EWY / USDC** | The iShares MSCI Korea ETF perpetual contracts are listed under ticker $EWY. The underlying ETF tracks large and mid-cap South Korean equities. **No FX conversion is required** at the contract level — currency exposure (USD/KRW) is already embedded within the ETF's net asset value. |
+
+    ## Data Source
+
+    <Note>
+      See the [Specification Index](/resources/specification-index) for the full list of pricing reference sources for each Korean equity market.
+    </Note>
+  </Tab>
+
+  <Tab title="Japan">
+    ## External Coverage (JST / UTC+9)
+
+    For Japan-listed equities, the Relayer derives external prices during the following market sessions:
+
+    | Session | Hours (JST) |
+    |---|---|
+    | Morning Session | 8:20 AM – 4:30 PM |
+    | Afternoon Session | 5:00 PM – 11:59 PM |
+
+    ## Internal Pricing
+
+    Internal pricing applies outside of the market open sessions, including:
+
+    | Period | Hours (JST) |
+    |---|---|
+    | Afternoon Break | 4:30 PM – 5:00 PM |
+    | Market Closed | 11:59 PM – 8:20 AM |
+    | Weekends & Exchange Holidays | All day |
+
+    <Note>
+      For Japanese exchange holidays, refer to the [JPX holiday calendar](https://www.jpx.co.jp/english/corporate/about-jpx/calendar/).
+    </Note>
+
+    ## FX Conversion
+
+    The Relayer aggregates executable quotes for JPY-denominated instruments alongside real-time USD/JPY FX rates. To maintain consistency with XYZ's linear contract structure — margined and settled exclusively in USDC — the system automatically converts these JPY quotes into USD pricing, eliminating currency friction for you.
+
+    ## Data Source
+
+    <Note>
+      See the [Specification Index](/resources/specification-index) for the full list of pricing reference sources for each Japanese equity market.
+    </Note>
+  </Tab>
+
+  <Tab title="Hong Kong">
+    ## External Coverage (HKT / UTC+8)
+
+    For Hong Kong-listed equities, the Relayer derives external prices during the following market sessions:
+
+    | Session | Hours (HKT) |
+    |---|---|
+    | Morning Session | 9:30 AM – 12:00 PM |
+    | Afternoon Session | 1:00 PM – 4:00 PM |
+
+    ## Internal Pricing
+
+    Internal pricing applies outside of the market open sessions, including:
+
+    | Period | Hours (HKT) |
+    |---|---|
+    | Lunch Break | 12:00 PM – 1:00 PM |
+    | Market Closed | 4:00 PM – 9:30 AM |
+    | Weekends & Exchange Holidays | All day |
+
+    <Note>
+      For Hong Kong exchange holidays, see [Holiday Closures](/resources/holiday-closures).
+    </Note>
+
+    ## FX Conversion
+
+    The Relayer aggregates executable quotes for HKD-denominated instruments alongside real-time USD/HKD FX rates. To maintain consistency with XYZ's linear contract structure — margined and settled exclusively in USDC — the system automatically converts these HKD quotes into USD pricing, eliminating currency friction for you.
+
+    ## Data Source
+
+    <Note>
+      See the [Specification Index](/resources/specification-index) for the full list of pricing reference sources for each Hong Kong equity market.
+    </Note>
+  </Tab>
+</Tabs>

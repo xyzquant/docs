@@ -1,28 +1,11 @@
 {
-  "$schema": "https://mintlify.com/docs.json",
-  "name": "trade[XYZ]",
+  "projectType": "saas",
+  "projectName": "trade[XYZ]",
+  "projectDescription": "A HIP-3 decentralized exchange on Hyperliquid offering 24/7 perpetual trading markets for equities, equity indices, commodities, FX, and pre-IPO perpetuals.",
   "theme": "luma",
-  "logo": {
-    "light": "https://media.brand.dev/84178d6e-5724-4c60-b0dc-ea2eac864753.png",
-    "dark": "https://media.brand.dev/b4ef7798-5513-4a86-a61d-d7ff192fa22a.png"
-  },
-  "favicon": "https://icons.duckduckgo.com/ip3/docs.trade.xyz.ico",
-  "colors": {
-    "primary": "#dd552c",
-    "light": "#24344c",
-    "dark": "#fbbf2c"
-  },
-  "fonts": {
-    "heading": { "family": "Inter" },
-    "body": { "family": "Inter" }
-  },
-  "navbar": {
-    "primary": {
-      "type": "button",
-      "label": "Launch App",
-      "href": "https://trade.xyz"
-    }
-  },
+  "primaryColor": "#dd552c",
+  "lightColor": "#24344c",
+  "darkColor": "#fbbf2c",
   "navigation": {
     "tabs": [
       {
@@ -84,5 +67,27 @@
         ]
       }
     ]
-  }
+  },
+  "keyFeatures": [
+    "24/7 perpetual trading for equities, indices, commodities, and FX",
+    "HIP-3 DEX built on Hyperliquid blockchain",
+    "Extended-hours price discovery via internal oracle mechanism",
+    "Discovery bounds for safe weekend and holiday trading",
+    "Pre-IPO Perpetuals (IPOPs) for pre-listing price discovery",
+    "USDC-margined and settled linear contracts",
+    "Cross and isolated margin modes",
+    "On-chain backstop liquidator for cross-margin assets",
+    "Continuous-time EMA-based oracle with 30-minute time constant",
+    "Tiered fee structure with growth mode for reduced fees"
+  ],
+  "publicApiSurface": [
+    "Hyperliquid API (compatible with XYZ markets)",
+    "Oracle price feed (updated ~every 3 seconds by the Relayer)",
+    "Mark price (median of oracle, EMA-adjusted oracle, and market mid)",
+    "External price feed (last externally-derived fair price)",
+    "Discovery bounds (±1/max_leverage of reference price)",
+    "Funding rate formula: 0.5 × [P + clamp(interest − P, −0.0005, 0.0005)]",
+    "Liquidation price: liq_price = price − side × margin_available / position_size / (1 − l × side)",
+    "ADL sorting index: (mark_price / entry_price) × (notional_position / account_value)"
+  ]
 }

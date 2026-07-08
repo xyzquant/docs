@@ -1,0 +1,74 @@
+---
+title: "trade[XYZ]: 24/7 Perpetual Markets for Stocks, Indices & Commodities"
+sidebarTitle: "Introduction"
+description: "trade[XYZ] is a decentralized exchange on Hyperliquid offering perpetual contracts for equities, indices, commodities, FX, and pre-IPO markets — trading 24/7."
+---
+
+trade[XYZ] is a HIP-3 decentralized exchange (DEX) built on the Hyperliquid blockchain. It lists perpetual derivative contracts across equities, equity indices, commodities, foreign exchange, and pre-IPO assets — all margined and settled in USDC. Unlike traditional exchanges, trade[XYZ] markets operate 24 hours a day, 7 days a week, enabling price discovery over weekends, holidays, and extended sessions when underlying exchanges are closed.
+
+<CardGroup cols={2}>
+  <Card title="Perp Mechanics" icon="gear" href="/perp-mechanics/overview">
+    Learn how XYZ perpetuals work — oracle pricing, mark price, and funding.
+  </Card>
+  <Card title="Risk & Margining" icon="shield" href="/risk-and-margining/margin-modes">
+    Understand margin modes, leverage, liquidations, and auto-deleveraging.
+  </Card>
+  <Card title="Asset Directory" icon="chart-line" href="/asset-directory/stocks">
+    Browse every listed market: stocks, indices, commodities, FX, and IPOPs.
+  </Card>
+  <Card title="Specification Index" icon="table" href="/resources/specification-index">
+    Full parameter table for all XYZ markets — leverage, bounds, OI caps, and more.
+  </Card>
+</CardGroup>
+
+## What is trade[XYZ]?
+
+The XYZ protocol is a HIP-3 DEX that defines the market listings, oracle sources, leverage limits, and other parameters for XYZ perpetual markets. [HIP-3](https://hyperliquid.gitbook.io/hyperliquid-docs/hyperliquid-improvement-proposals-hips/hip-3-builder-deployed-perpetuals) allows independent builders to deploy and operate their own perpetual markets on Hyperliquid.
+
+**trade[XYZ]** is the primary interface for accessing XYZ markets, though XYZ markets are also accessible via the Hyperliquid API and any compatible client. The protocol is non-custodial — trade[XYZ] never holds your funds or intermediates your trades.
+
+<Note>
+  trade[XYZ] is not available in the United States or to U.S. persons, or in other restricted jurisdictions. Nothing in this documentation constitutes financial, legal, tax, or investment advice.
+</Note>
+
+## Key concepts
+
+| Term | Description |
+|---|---|
+| **XYZ Protocol** | The HIP-3 deployment that governs market listings and parameters |
+| **trade[XYZ]** | The trading interface for XYZ (and other Hyperliquid) markets |
+| **Relayer** | The service that computes and broadcasts oracle, mark, and external prices every ~3 seconds |
+| **HyperCore** | Hyperliquid's core matching engine — handles orders, funding, liquidations, and ADL |
+| **IPOP** | Pre-IPO Perpetual — a cash-settled perp referencing an anticipated public listing |
+
+## HIP-3 metadata
+
+| Field | Value |
+|---|---|
+| **Name** | `xyz` |
+| **Full Name** | `XYZ` |
+| **Deployer** | `0x88806a71D74ad0a510b350545C9aE490912F0888` |
+| **Oracle Updater** | `0x1234567890545d1Df9EE64B35Fdd16966e08aCEC` |
+
+## Explore the docs
+
+<CardGroup cols={3}>
+  <Card title="Oracle Price" icon="satellite-dish" href="/perp-mechanics/oracle-price">
+    How XYZ derives prices 24/7 from external markets and internal EMA mechanisms.
+  </Card>
+  <Card title="Discovery Bounds" icon="circle-dot" href="/perp-mechanics/discovery-bounds">
+    Leverage-based price bounds that enable safe 24/7 price discovery.
+  </Card>
+  <Card title="Fees" icon="receipt" href="/perp-mechanics/fees">
+    Standard and growth-mode fee tiers based on 14-day rolling volume.
+  </Card>
+  <Card title="Margin Modes" icon="sliders" href="/risk-and-margining/margin-modes">
+    Cross, isolated, and strict isolated margin — choose the right mode.
+  </Card>
+  <Card title="Liquidations" icon="triangle-exclamation" href="/risk-and-margining/liquidation-mechanics">
+    When and how positions are liquidated on XYZ markets.
+  </Card>
+  <Card title="Pre-IPO Perpetuals" icon="building-columns" href="/asset-directory/pre-ipo-perpetuals">
+    Trade cash-settled perps on anticipated public listings before they list.
+  </Card>
+</CardGroup>

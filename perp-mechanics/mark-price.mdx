@@ -1,0 +1,29 @@
+---
+title: "Mark Price: Margining, Liquidations & Unrealized P&L"
+sidebarTitle: "Mark Price"
+description: "The XYZ mark price is the median of three components: oracle price, an EMA-adjusted oracle, and the market mid. Used for margining, liquidations, and P&L."
+---
+
+The mark price is the price that matters most to your open positions. trade[XYZ] uses the mark price to calculate margin requirements, determine liquidation thresholds, trigger stop and limit orders, and compute your unrealized P&L. Because it draws on multiple independent inputs, the mark price is resistant to manipulation from any single data source.
+
+## How the Mark Price Is Calculated
+
+The mark price is the **median of three components**:
+
+1. **The oracle price.** The externally-derived or EMA-advanced oracle described on the [Oracle Price](/perp-mechanics/oracle-price) page.
+
+2. **Oracle price + EMA of basis.** The oracle price plus a 150-second continuous-time exponentially weighted moving average of the difference between the perpetual's mid-price and the oracle price. This component tracks how far the perpetual is trading relative to the oracle, smoothed over time.
+
+3. **Local market mid.** The median of the best bid, best ask, and last trade price, computed directly from the order book.
+
+## Who Computes Each Component
+
+The Relayer publishes components **(1)** and **(2)** for every asset in each update. The Hyperliquid protocol (HyperCore) independently computes component **(3)** from live order book data, then takes the median of all three components to produce the final mark price.
+
+Using the median of three independent sources ensures that a single outlier — whether a stale oracle, a thin order book, or a momentary spread spike — cannot unilaterally move your mark price.
+
+## Update Clamping
+
+<Note>
+  Relayer updates for both the mark price and the oracle price are clamped to **±50 basis points** of the current value per update. This prevents sudden large price jumps from immediately propagating to your margin or P&L, giving the system time to reflect genuine price moves rather than data anomalies.
+</Note>

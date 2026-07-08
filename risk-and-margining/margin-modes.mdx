@@ -1,0 +1,71 @@
+---
+title: "Margin Modes and Leverage on XYZ Perpetuals"
+sidebarTitle: "Margin Modes"
+description: "XYZ supports cross, normal isolated, and strict isolated margin. Leverage ranges from 1x up to the per-asset maximum, with maintenance margin at half the initial rate."
+---
+
+XYZ inherits its margining mechanisms from HyperCore. Every time you open a position, you choose a margin mode that determines how collateral is allocated and how a potential liquidation would affect the rest of your account. Understanding the differences between modes — and how leverage interacts with maintenance margin — is essential to managing your risk on XYZ perpetuals.
+
+## Margin Modes
+
+When you open a position, select the margin mode that matches your risk management approach. You can check the **Margin Mode** column on the [Specification Index](/resources/specification-index) to see the default margin mode for each market.
+
+| Mode | Collateral Scope | Liquidation Isolation | Margin Adjustment After Open |
+|---|---|---|---|
+| **Cross Margin** | Shared across all cross positions | Cross liquidations affect all cross positions | N/A — collateral is shared |
+| **Normal Isolated** | Constrained to this asset only | Liquidation does not affect other positions | Margin can be added or removed |
+| **Strict Isolated** | Constrained to this asset only | Liquidation does not affect other positions | Margin cannot be removed manually |
+
+### Cross Margin
+
+Cross margin is the default for markets where it is enabled. It shares collateral across all of your open cross margin positions, giving you maximum capital efficiency. If one position moves against you, the shared collateral pool absorbs the loss — but a liquidation event on a cross position transfers all your cross positions and cross margin to the liquidator.
+
+### Normal Isolated Margin
+
+Normal isolated margin constrains the collateral for a position to that specific asset. A liquidation in one isolated position cannot affect your other isolated positions or your cross positions, and vice versa. After opening the position you can add or remove margin at any time to adjust your effective leverage.
+
+### Strict Isolated Margin
+
+Strict isolated margin works the same as normal isolated margin, with one key difference: you cannot manually remove margin from the position after it is opened. Margin is proportionally released back to your account as the position is reduced or closed.
+
+---
+
+## Initial Margin and Leverage
+
+You can set leverage to any integer between **1x** and the maximum leverage for the asset. Maximum leverage varies by market — check the [Specification Index](/resources/specification-index) for the value that applies to each asset.
+
+The margin required to open a position is:
+
+```
+required_margin = position_size × mark_price / leverage
+```
+
+A few important rules govern how leverage and margin interact after a position is open:
+
+- **Normal Isolated** positions support adding and removing margin after the position is opened.
+- Isolated positions apply unrealized P&L as additional margin for that position.
+- You can increase the leverage of an existing position without closing it.
+- Leverage is only checked at the moment you open a position. After that, you are responsible for monitoring your leverage usage to avoid liquidation.
+
+<Note>
+  If a position has negative unrealized P&L, you can partially or fully close it, or add margin (if using Normal Isolated) to reduce the risk of liquidation.
+</Note>
+
+---
+
+## Maintenance Margin
+
+Maintenance margin is the minimum collateral you must hold to keep a position open. If your account equity — collateral plus unrealized P&L — falls below the maintenance level, your position is eligible for liquidation.
+
+The maintenance margin for an asset is set to **half the initial margin at that asset's maximum leverage**. Because maximum leverage on XYZ ranges from 3x to 40x, maintenance margin rates fall in the following range:
+
+| Max Leverage | Maintenance Margin Rate |
+|---|---|
+| 40x | 1.25% |
+| 3x | 16.7% |
+
+The maintenance level for your position is calculated by multiplying the applicable maintenance margin rate by your total open notional.
+
+<Tip>
+  Check the [Specification Index](/resources/specification-index) to find the default margin mode and maximum leverage for every market available on XYZ.
+</Tip>

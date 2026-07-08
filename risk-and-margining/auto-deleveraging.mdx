@@ -1,0 +1,58 @@
+---
+title: "Auto-Deleveraging (ADL): Last Resort Risk Management"
+sidebarTitle: "Auto-Deleveraging"
+description: "ADL is the final safeguard in XYZ's liquidation waterfall. It closes profitable positions against insolvent ones when market and backstop liquidations both fail."
+---
+
+Auto-deleveraging (ADL) is the last safeguard in XYZ's liquidation waterfall. It is triggered only when both market order liquidations and backstop liquidations fail to close a position that has become undercollateralized. ADL is mechanical, transparent, and non-discretionary — and every event can be independently verified on-chain via HyperCore's settlement records.
+
+## Backstop Liquidator
+
+Before ADL is ever considered, the on-chain backstop liquidator acts as an intermediate safety layer. For all XYZ markets where cross margin is enabled, the backstop liquidator is live and running as a fully on-chain strategy. It takes over backstop-liquidatable positions and manages them in a way designed to avoid bad debt and minimize reliance on ADL. During high-volatility events, this significantly reduces the likelihood that cross margin assets will reach ADL.
+
+---
+
+## Why ADL Exists
+
+In a perpetual derivatives market, every long position is matched by a short, and all positions are collateralized from a shared pool. When a trader's account equity becomes negative, the system cannot simply absorb the loss — doing so would violate the zero-sum constraint that total long notional must equal total short notional, and the platform would accrue bad debt. ADL resolves this by closing positions on the profitable side to rebalance the system, ensuring aggregate equity remains constant and no bad debt is created.
+
+---
+
+## How ADL Works
+
+When ADL is triggered, the system selects users on the profitable side of the market for forced deleveraging. Selection is based on a composite sorting index that accounts for both profitability and leverage:
+
+```
+sorting_index = (mark_price / entry_price) × (notional_position / account_value)
+```
+
+Users with the **highest sorting index** — those who are the most profitable and the most leveraged — are deleveraged first. Their positions are closed at the previous mark price against the insolvent side of the market. This transfer of position value keeps aggregate system equity constant and eliminates the bad debt.
+
+<Warning>
+  If you hold a large, profitable, and highly leveraged position, you may be selected for ADL during an extreme market event. Monitor your sorting index and consider reducing leverage or taking partial profits during periods of high volatility.
+</Warning>
+
+---
+
+## How XYZ Minimizes ADL
+
+ADL is a last resort. XYZ reduces the frequency of ADL events through a layered approach:
+
+<Steps>
+  <Step title="Conservative Maintenance Margin">
+    XYZ sets maintenance margin conservatively, giving the system more time to act before a position becomes critically undercollateralized.
+  </Step>
+  <Step title="Market Order Liquidations">
+    When maintenance margin is breached, the system first attempts to close the position by sending full-size market orders to the order book.
+  </Step>
+  <Step title="Backstop Liquidator">
+    If market order liquidations are insufficient, the on-chain backstop liquidator steps in for cross margin-enabled assets, absorbing undercollateralized positions while avoiding bad debt.
+  </Step>
+  <Step title="Auto-Deleveraging (Last Resort)">
+    Only if all prior steps fail does the system resort to ADL, closing profitable positions against the insolvent side to restore system balance.
+  </Step>
+</Steps>
+
+<Note>
+  Every ADL event is fully transparent and can be independently verified on-chain via HyperCore's settlement records.
+</Note>

@@ -1,0 +1,43 @@
+---
+title: "Funding Rate Formula for XYZ Perpetual Markets"
+sidebarTitle: "Funding Rate"
+description: "XYZ applies a 0.5x scaling factor to Hyperliquid's funding formula, targeting ~5.5% annualized baseline funding across all perpetual markets."
+---
+
+Funding is a periodic payment exchanged between long and short position holders that keeps a perpetual contract's price anchored to the underlying asset's spot price. When the perp trades above the oracle price, longs pay shorts; when it trades below, shorts pay longs. Getting the funding rate right matters — set it too high and you impose unnecessary carry costs on traders; set it too low and the perp can drift far from fair value.
+
+## Why XYZ uses a 0.5x scaling factor
+
+The default crypto funding rate has remained unchanged at **0.01% per 8 hours** since BitMEX introduced the mechanism in 2016. That default was designed for crypto assets, where borrow rates are negligible. XYZ lists traditional asset classes — equities, commodities, FX, and indices — where borrow rates are typically closer to **SOFR + 1–2% annualised**.
+
+Applying the standard crypto default to these markets would result in funding costs that are out of step with the underlying asset economics. To address this, XYZ applies a **0.5x scaling factor** to Hyperliquid's base funding formula across all standard XYZ markets.
+
+## The funding rate formula
+
+XYZ calculates the funding rate as follows:
+
+```
+Funding Rate XYZ (F) = 0.5 × [Average Premium Index (P) + clamp(interest rate − P, −0.0005, 0.0005)]
+```
+
+Where:
+- **Average Premium Index (P)** — the time-weighted average of the premium or discount between the mark price and the oracle price over the funding interval
+- **interest rate** — the base interest rate used in Hyperliquid's funding formula
+- **clamp(x, −0.0005, 0.0005)** — caps the interest rate adjustment to ±0.0005 per funding period, limiting the influence of the interest component when the premium index already moves funding in the same direction
+
+<Tip>
+  The 0.5x factor halves the entire expression, including both the premium index term and the clamped interest rate adjustment. This means XYZ funding is consistently less aggressive than Hyperliquid's default, not just at the baseline.
+</Tip>
+
+## Effect of the scaling factor
+
+Applying the 0.5x factor produces two practical outcomes:
+
+1. **Lower baseline funding** — the annualised baseline funding across all XYZ markets is approximately **~5.5%**, compared to the ~10.95% implied by the standard 0.01%/8h crypto default.
+2. **Less aggressive weekend funding** — when underlying markets are closed and price discovery relies on the XYZ oracle, funding pressure is reduced, avoiding punitive rates during periods of natural price divergence.
+
+<Note>
+  This formula applies to all **standard XYZ markets**. Pre-IPO Perpetuals (IPOPs) use a separate funding multiplier of **0.005** — equivalent to 1% of the standard calculation — reflecting the longer-dated, less liquid nature of pre-IPO assets.
+</Note>
+
+For full details on how funding works for IPOPs, including the 0.005 multiplier and its rationale, see the [Pre-IPO Perpetuals](/asset-directory/pre-ipo-perpetuals) page.
